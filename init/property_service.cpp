@@ -103,6 +103,8 @@ static std::thread property_service_thread;
 
 static PropertyInfoAreaFile property_info_area;
 
+static bool weaken_prop_override_security = false;
+
 struct PropertyAuditData {
     const ucred* cr;
     const char* name;
@@ -920,6 +922,9 @@ void PropertyLoadBootDefaults() {
 
     // Update with vendor-specific property runtime overrides
     vendor_load_properties();
+
+    // Restore the normal property override security after init extension is executed
+    weaken_prop_override_security = false;
 
     property_initialize_ro_product_props();
     property_derive_build_fingerprint();
